@@ -7,7 +7,6 @@ myFolders = os.listdir(mainFolder)
 
 print(myFolders)
 
-i = 0
 for folder in myFolders:
     path = mainFolder + '/' + folder
 
@@ -17,22 +16,23 @@ for folder in myFolders:
 
     print(f'Total no of images detected {len(myList)}')
 
-    for imgN in myList:
+    for imgName in myList:
         # print(imgN)
-        curImg = cv2.imread(f'{path}/{imgN}')
-        curImg = cv2.resize(curImg, (0, 0), None, 0.2, 0.2)
-        images.append(curImg)
+        currImg = cv2.imread(f'{path}/{imgName}')
+        currImg = cv2.resize(currImg, (0, 0), None, 0.5, 0.5)
+        images.append(currImg)
 
     stitcher = cv2.Stitcher_create(cv2.Stitcher_PANORAMA)
     status, result = stitcher.stitch(images)
+    # print(myFolders)
+    # print(myList)
 
     if status == cv2.STITCHER_OK:
         print("Generated")
         cv2.imshow(folder, result)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
-        # cv2.imwrite(f'{i}.png',result)
-        # i+=1
+        cv2.imwrite(f'./out/{folder}.png', result)
     else:
         print("Failed")
-    print(len(images))
+    # print(len(images))

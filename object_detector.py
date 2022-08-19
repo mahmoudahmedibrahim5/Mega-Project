@@ -24,7 +24,8 @@ class ColorDetector:
                 #  small in distances.
                 if w > 500 or h > 500 or w < 10 or h < 10:  # skip for really bing contours or small ones
                     continue
-                cv2.rectangle(self.img, (x, y), (x + w, y + h), (139, 0, 139), 3)
+                cv2.rectangle(self.img, (x, y),
+                              (x + w, y + h), (139, 0, 139), 3)
                 cv2.putText(self.img, text, (x, y), font,
                             fontVal, colorContour, colorVal)
 
@@ -46,29 +47,13 @@ class ColorDetector:
         return list(self.colors.keys())
 
     def __doMask(self, color: str):
-        res = cv2.inRange(self.imgHSV, self.__getMaskColorLower(color), self.__getMaskColorUpper(color))
+        res = cv2.inRange(self.imgHSV, self.__getMaskColorLower(
+            color), self.__getMaskColorUpper(color))
 
         return res
 
 
 colors = {
-    'red': [
-        np.array([-10, 245, 215]),
-        np.array([10, 265, 295])],
-    'blue': [
-        np.array([110, 245, 215]),
-        np.array([130, 265, 295])
-    ], 'yellow': [
-        np.array([18, 245, 215]),
-        np.array([38, 265, 295])
-    ], 'green': [
-        np.array([50, 245, 215]),
-        np.array([70, 265, 295])
-    ],
-    'fragment': [
-        np.array([16, 232, 207]),
-        np.array([36, 252, 287]),
-    ],
     'star': [
         np.array([112, 93, 163]),
         np.array([132, 113, 243]),
@@ -91,9 +76,5 @@ clr.ColorContour(color='sponge', text='sponge')
 clr.ColorContour(color='star', text='star')
 clr.ColorContour(color='colony', text='colony')
 
-# clr.ColorContour('red', 'red')
-# clr.ColorContour('blue', 'blue')
-# clr.ColorContour('yellow', 'yellow')
-# clr.ColorContour('green', 'green')
 cv2.imshow('res', clr.img)
 cv2.waitKey(0)

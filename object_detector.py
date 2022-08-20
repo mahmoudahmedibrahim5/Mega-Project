@@ -75,6 +75,9 @@ colors = {
         np.array([122, 35, 279]),
     ]
 }
+if len(sys.argv) == 1:
+    print("python object_detector.py IMG_PATH.ext")
+    exit(0)
 img1 = cv2.imread(sys.argv[1])
 
 clr = ColorDetector(img1, colors)

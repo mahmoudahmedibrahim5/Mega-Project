@@ -14,6 +14,9 @@ class ColorDetector:
                      fontVal=1, retrievalMode=cv2.RETR_EXTERNAL, approxMode=cv2.CHAIN_APPROX_SIMPLE):
         maskColor = self.__doMask(color)
 
+        kernel = np.ones((7, 7), np.uint8)
+        maskColor = cv2.dilate(maskColor, kernel=kernel, iterations=4)
+
         contours, hierarchy = cv2.findContours(
             maskColor, retrievalMode, approxMode)
 
@@ -22,7 +25,8 @@ class ColorDetector:
                 x, y, w, h = cv2.boundingRect(contour)
                 # TODO clearer results ( maybe have a hashmap saves where are the contours and skip if its relatively
                 #  small in distances.
-                if w > 500 or h > 500 or w < 10 or h < 10:  # skip for really bing contours or small ones
+                if w > 500 or h > 500 or w < 30 or h < 55:
+                    # skip for really big contours or small ones
                     continue
                 cv2.rectangle(self.img, (x, y),
                               (x + w, y + h), (139, 0, 139), 3)
@@ -54,17 +58,21 @@ class ColorDetector:
 
 
 colors = {
+    'fragment': [
+        np.array([16, 232, 207]),
+        np.array([36, 252, 287]),
+    ],
     'star': [
-        np.array([112, 93, 163]),
-        np.array([132, 113, 243]),
+        np.array([111, 86, 172]),
+        np.array([131, 255, 255]),
     ],
     'colony': [
-        np.array([155, 124, 162]),
-        np.array([175, 144, 242]),
+        np.array([155, 101, 187]),
+        np.array([175, 121, 267]),
     ],
     'sponge': [
-        np.array([80, 234, 76]),
-        np.array([100, 254, 156]),
+        np.array([102, 15, 199]),
+        np.array([122, 35, 279]),
     ]
 }
 img1 = cv2.imread(sys.argv[1])

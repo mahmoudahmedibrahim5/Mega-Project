@@ -24,6 +24,7 @@ for folder in myFolders:
 
     stitcher = cv2.Stitcher_create(cv2.Stitcher_PANORAMA)
     status, result = stitcher.stitch(images)
+    print(images)
     # print(myFolders)
     # print(myList)
 

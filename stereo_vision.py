@@ -1,7 +1,7 @@
 import sys
 
-import numpy as np
 import cv2
+import numpy as np
 
 # Read both images and convert to grayscale
 # img1 = cv.imread('left_img.png', cv.IMREAD_GRAYSCALE)

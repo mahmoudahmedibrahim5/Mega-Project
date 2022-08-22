@@ -36,7 +36,7 @@ def stitch_custom(mainFolder="images/stitching"):
             cv2.imshow(folder, result)
             cv2.waitKey(0)
             cv2.destroyAllWindows()
-            cv2.imwrite(f'./out/{folder}.png', result)
+            cv2.imwrite(f'./out/stitching/{folder}.png', result)
         else:
             print("Failed")
         # print(len(images))

@@ -1,22 +1,26 @@
 import sys
+import os
 
 import cv2
 import numpy as np
+
 
 # Read both images and convert to grayscale
 # img1 = cv.imread('left_img.png', cv.IMREAD_GRAYSCALE)
 # img2 = cv.imread('right_img.png', cv.IMREAD_GRAYSCALE)
 
-if len(sys.argv) <= 2:
-    print("disparity_map.py img_left img_right")
-    exit(0)
+# if len(sys.argv) <= 2:
+#     print("disparity_map.py img_left img_right")
+#     exit(0)
 
-img1 = cv2.imread(sys.argv[1], cv2.IMREAD_GRAYSCALE)
+# img1 = cv2.imread(sys.argv[1], cv2.IMREAD_GRAYSCALE)
+#
+# img2 = cv2.imread(sys.argv[2], cv2.IMREAD_GRAYSCALE)
 
-img2 = cv2.imread(sys.argv[2], cv2.IMREAD_GRAYSCALE)
 
-
-def stereo(img1_gray, img2_gray):
+def stereo(img1_path, img2_path, i):
+    img1 = cv2.imread(img1_path, cv2.IMREAD_GRAYSCALE)
+    img2 = cv2.imread(img2_path, cv2.IMREAD_GRAYSCALE)
     # cv2.imshow("1", img1)
     # cv2.imshow("2", img2)
     # cv2.waitKey(0)
@@ -215,8 +219,10 @@ def stereo(img1_gray, img2_gray):
     disparity_SGBM = cv2.normalize(disparity_SGBM, disparity_SGBM, alpha=255,
                                    beta=0, norm_type=cv2.NORM_MINMAX)
     disparity_SGBM = np.uint8(disparity_SGBM)
-    cv2.imshow("Disparity", disparity_SGBM)
-    cv2.imwrite("disparity_grayscale.png", disparity_SGBM)
+
+    # cv2.imshow("Disparity", disparity_SGBM)
+
+    cv2.imwrite(f"out/stereo/disparity_grayscale_{i}.png", disparity_SGBM)
 
     cv2.waitKey()
     cv2.destroyAllWindows()
@@ -227,4 +233,16 @@ def stereo(img1_gray, img2_gray):
     # from depth we can find the length also
 
 
-stereo(img1, img2)
+i = 1
+mainFolder = "images/stereo"
+myFolders = os.listdir(mainFolder)
+for file in myFolders:
+    path = mainFolder + "/" + file
+    images = os.listdir(path)
+    x, y = images
+    x_path = f"{path}/{x}"
+    y_path = f"{path}/{y}"
+    img = cv2.imread(x_path, cv2.IMREAD_GRAYSCALE)
+    print(x_path, y_path)
+    stereo(x_path, y_path, i)
+    i += 1

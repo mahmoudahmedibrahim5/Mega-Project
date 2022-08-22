@@ -4,8 +4,10 @@ from PyQt5 import QtCore as qtc
 from PyQt5.QtGui import *
 import serial
 import cv2
+import os
 import sys
 from OpencvQT import Converter, Capture
+from stereo_vision import stereo
 from stitching import stitch_custom
 
 
@@ -111,8 +113,19 @@ class mainApp(qtw.QMainWindow, Ui_MainWindow):
         stitch_custom()
 
     def StereoVision_task(self):
-        # Put Stereovision code here
-        pass
+        mainFolder = "images/stereo"
+        myFolders = os.listdir(mainFolder)
+        i = 1
+        for file in myFolders:
+            path = mainFolder + "/" + file
+            images = os.listdir(path)
+            x, y = images
+            x_path = f"{path}/{x}"
+            y_path = f"{path}/{y}"
+            img = cv2.imread(x_path, cv2.IMREAD_GRAYSCALE)
+            print(x_path, y_path)
+            stereo(x_path, y_path, i)
+            i += 1
 
 
 if __name__ == '__main__':

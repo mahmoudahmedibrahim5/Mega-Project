@@ -6,6 +6,7 @@ import serial
 import cv2
 import sys
 from OpencvQT import Converter, Capture
+from stitching import stitch_custom
 
 
 class mainApp(qtw.QMainWindow, Ui_MainWindow):
@@ -33,7 +34,7 @@ class mainApp(qtw.QMainWindow, Ui_MainWindow):
         self.lay.addWidget(self.view, alignment=qtc.Qt.AlignCenter)
         self.view.setFixedSize(640, 400)
         self.init_camera()
-       ## self.lcdcurrent.
+        ## self.lcdcurrent.
 
         if self.bt_conn:
             self.robot_status.setText("Connected")
@@ -72,7 +73,7 @@ class mainApp(qtw.QMainWindow, Ui_MainWindow):
     def moveForward(self):
         if self.bt_conn:
             self.dir_label.setText("Car Direction: Left")
-            #self.ser.write(bytes("F\n", encoding = 'utf-8'))
+            # self.ser.write(bytes("F\n", encoding = 'utf-8'))
 
     def moveRight(self):
         if self.bt_conn:
@@ -89,30 +90,30 @@ class mainApp(qtw.QMainWindow, Ui_MainWindow):
             self.dir_label.setText("Car Direction: Left")
             ##self.ser.write(bytes("B\n", encoding='utf-8'))
 
-##next three function adjust motor speed and indicates the speed status on the screen
+    ##next three function adjust motor speed and indicates the speed status on the screen
     def higher_speed(self):
         if self.bt_conn:
             self.label_2.setText("High")
-            #self.ser.write(bytes("H\n", encoding = 'utf-8'))
+            # self.ser.write(bytes("H\n", encoding = 'utf-8'))
 
     def med_speed(self):
         if self.bt_conn:
             self.label_2.setText("Medium")
-            #self.ser.write(bytes("M\n", encoding = 'utf-8'))
+            # self.ser.write(bytes("M\n", encoding = 'utf-8'))
 
     def lower_speed(self):
         if self.bt_conn:
             self.label_2.setText("Low")
-            #self.ser.write(bytes("L\n", encoding = 'utf-8'))
+            # self.ser.write(bytes("L\n", encoding = 'utf-8'))
 
     ## SOFTWARE TASKS CODE IMPLEMENTATION  HERE
     def Stitching_task(self):
-        ## Put Stitching and object detection code here
-        pass
+        stitch_custom()
 
     def StereoVision_task(self):
         # Put Stereovision code here
         pass
+
 
 if __name__ == '__main__':
     app = qtw.QApplication([])

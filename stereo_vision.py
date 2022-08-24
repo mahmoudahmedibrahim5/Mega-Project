@@ -1,9 +1,7 @@
 import sys
 import os
-
 import cv2
 import numpy as np
-
 
 # Read both images and convert to grayscale
 # img1 = cv.imread('left_img.png', cv.IMREAD_GRAYSCALE)
@@ -16,7 +14,6 @@ import numpy as np
 # img1 = cv2.imread(sys.argv[1], cv2.IMREAD_GRAYSCALE)
 #
 # img2 = cv2.imread(sys.argv[2], cv2.IMREAD_GRAYSCALE)
-
 
 def stereo(img1_path, img2_path, i):
     img1 = cv2.imread(img1_path, cv2.IMREAD_GRAYSCALE)

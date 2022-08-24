@@ -89,22 +89,22 @@ class mainApp(qtw.QMainWindow, Ui_MainWindow):
     def moveForward(self):
         if self.bt_conn:
             self.dir_label.setText("Car Direction: Forward")
-            # self.ser.write(bytes("F\n", encoding = 'utf-8'))
+            self.ser.write(bytes("F\n", encoding = 'utf-8'))
 
     def moveRight(self):
         if self.bt_conn:
             self.dir_label.setText("Car Direction: Right")
-            ##self.ser.write(bytes("R\n", encoding='utf-8'))
+            self.ser.write(bytes("R\n", encoding='utf-8'))
 
     def moveLeft(self):
         if self.bt_conn:
             self.dir_label.setText("Car Direction: Left")
-            ##self.ser.write(bytes("L\n", encoding='utf-8'))
+            self.ser.write(bytes("L\n", encoding='utf-8'))
 
     def moveBackward(self):
         if self.bt_conn:
             self.dir_label.setText("Car Direction: Backward")
-            ##self.ser.write(bytes("B\n", encoding='utf-8'))
+            self.ser.write(bytes("B\n", encoding='utf-8'))
 
     ##next three function adjust motor speed and indicates the speed status on the screen
     def higher_speed(self):

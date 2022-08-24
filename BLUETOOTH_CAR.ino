@@ -5,11 +5,13 @@
 #define M2_2 A3
 #define M1EN 10
 #define M2EN 9
-int spd = 255;
+int spd = 85;
 
 #define VSensor A0
 #define CSensor A1
+
 float volt,current;
+long readingsMillis;
 
 #define Red 5
 #define Blue 6
@@ -39,9 +41,14 @@ void setup()
 }
 
 void loop() {
-  volt = (analogRead(VSensor)/1023.)*12;
-  current = (analogRead(CSensor)/1023.)*5;
-  //Serial.println("");
+  volt = (analogRead(VSensor)/1023.)*20;
+  current = (0.0264*analogRead(CSensor)-13.51);
+  if(millis() - readingsMillis > 250){
+    Serial.print(volt);
+    Serial.print("");
+    Serial.println(current);
+    readingsMillis = millis();
+  }
   
   if (Serial.available() > 0) {
     command = Serial.read();
@@ -58,8 +65,8 @@ void loop() {
       case 'R':
         right();
         break;
-      case 'D':
-        setspeed('L');
+      case 'S':
+        setspeed('S');
         break;
       case 'M':
         setspeed('M');
@@ -67,12 +74,16 @@ void loop() {
       case 'H':
         setspeed('H');
         break;
+      case 'P':
+        Stop();
+        break;
       default:
         Stop();
         break;
     }
   }
-  
+  analogWrite(M1EN,spd);
+  analogWrite(M2EN,spd);
   //RGB LED
   if (spd <= 85)
   {
@@ -102,7 +113,6 @@ void forward()
   digitalWrite(M1_2,LOW);
   digitalWrite(M2_1,HIGH);
   digitalWrite(M2_2,LOW);
-  delay(1000);
 }
 
 void back()
@@ -140,7 +150,7 @@ void Stop()
 void setspeed(char s)
 {
   switch(s){
-    case 'L':
+    case 'S':
       spd = 85;
       break;
     case 'M':
@@ -150,6 +160,4 @@ void setspeed(char s)
       spd = 255;
       break;
   }
-  analogWrite(M1EN,spd);
-  analogWrite(M2EN,spd);
 }

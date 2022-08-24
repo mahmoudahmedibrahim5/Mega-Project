@@ -1,12 +1,8 @@
 import os
-
 import cv2
-
-
 # mainFolder1 = "images"
 
 # print(myFolders)
-
 
 def stitch_custom(mainFolder="images/stitching"):
     myFolders = os.listdir(mainFolder)

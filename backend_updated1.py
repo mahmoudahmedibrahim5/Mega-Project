@@ -7,6 +7,7 @@ import cv2
 import os
 import sys
 from OpencvQT import Converter, Capture
+from getData import GetData
 from stereo_vision import stereo
 from stitching import stitch_custom
 
@@ -18,19 +19,31 @@ class mainApp(qtw.QMainWindow, Ui_MainWindow):
         self.bt_conn = 1
 
         try:
-            self.ser = serial.Serial("COM8", 9600, timeout=0.1)  # Change your port name COM... and your baudrate
+            self.ser = serial.Serial("COM4", 9600, timeout=0.1)  # Change your port name COM... and your baudrate
         except serial.SerialException:
             self.bt_conn = 0
 
+        if self.bt_conn:
+            self.thread = GetData(self.ser)
+            self.thread.Readings.connect(self.displayData)
+            self.thread.start()
+
+        #Car Movement Buttons FUnctionality
         self.pushButton.clicked.connect(self.moveForward)
         self.pushButton_2.clicked.connect(self.moveRight)
         self.pushButton_3.clicked.connect(self.moveLeft)
         self.pushButton_4.clicked.connect(self.moveBackward)
+
+        #Software Tak Buttons
         self.stitch_1.clicked.connect(self.Stitching_task)
         self.stereo_1.clicked.connect(self.StereoVision_task)
+
+        #Car Speed Control
         self.speed_up.clicked.connect(self.higher_speed)
         self.speed_med.clicked.connect(self.med_speed)
         self.speed_down.clicked.connect(self.lower_speed)
+
+        #Webcam Functionality
         self.cam_screenshot.clicked.connect(self.cap_frame)
         self.view = qtw.QLabel()
         self.lay.addWidget(self.view, alignment=qtc.Qt.AlignCenter)
@@ -38,6 +51,7 @@ class mainApp(qtw.QMainWindow, Ui_MainWindow):
         self.init_camera()
         ## self.lcdcurrent.
 
+        #bluetooth Connection indicator
         if self.bt_conn:
             self.robot_status.setText("Connected")
             self.robot_status.setStyleSheet("color: rgb(0, 0, 170);")
@@ -74,39 +88,44 @@ class mainApp(qtw.QMainWindow, Ui_MainWindow):
 
     def moveForward(self):
         if self.bt_conn:
-            self.dir_label.setText("Car Direction: Left")
-            # self.ser.write(bytes("F\n", encoding = 'utf-8'))
+            self.dir_label.setText("Car Direction: Forward")
+            self.ser.write(bytes("F\n", encoding = 'utf-8'))
 
     def moveRight(self):
         if self.bt_conn:
-            self.dir_label.setText("Car Direction: Left")
-            ##self.ser.write(bytes("R\n", encoding='utf-8'))
+            self.dir_label.setText("Car Direction: Right")
+            self.ser.write(bytes("R\n", encoding='utf-8'))
 
     def moveLeft(self):
         if self.bt_conn:
             self.dir_label.setText("Car Direction: Left")
-            ##self.ser.write(bytes("L\n", encoding='utf-8'))
+            self.ser.write(bytes("L\n", encoding='utf-8'))
 
     def moveBackward(self):
         if self.bt_conn:
-            self.dir_label.setText("Car Direction: Left")
-            ##self.ser.write(bytes("B\n", encoding='utf-8'))
+            self.dir_label.setText("Car Direction: Backward")
+            self.ser.write(bytes("B\n", encoding='utf-8'))
 
     ##next three function adjust motor speed and indicates the speed status on the screen
     def higher_speed(self):
         if self.bt_conn:
             self.label_2.setText("High")
-            # self.ser.write(bytes("H\n", encoding = 'utf-8'))
+            self.ser.write(bytes("H\n", encoding = 'utf-8'))
 
     def med_speed(self):
         if self.bt_conn:
             self.label_2.setText("Medium")
-            # self.ser.write(bytes("M\n", encoding = 'utf-8'))
+            self.ser.write(bytes("M\n", encoding = 'utf-8'))
 
     def lower_speed(self):
         if self.bt_conn:
-            self.label_2.setText("Low")
-            # self.ser.write(bytes("L\n", encoding = 'utf-8'))
+            self.label_2.setText("Slow")
+            self.ser.write(bytes("S\n", encoding = 'utf-8'))
+
+    def displayData(self, voltage, current):
+        if self.bt_conn:
+            self.lcdvolt.display(voltage)
+            self.lcdcurrent.display(current)
 
     ## SOFTWARE TASKS CODE IMPLEMENTATION  HERE
     def Stitching_task(self):
